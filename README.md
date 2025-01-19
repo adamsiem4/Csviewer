@@ -1,1 +1,1 @@
-Projekt wdrożeniowy WSB
+Projekt wdrożeniowy UWSB
