@@ -1,6 +1,6 @@
 1. Wprowadzenie
 
-Celem tego projektu jest stworzenie aplikacji do przeglądania i sortowania danych z plików CSV, z interfejsem graficznym zaprojektowanym w Pythonie z wykorzystaniem biblioteki Tkinter. Projekt jest zgodny z wytycznymi SAFe® 6.0 i przyjmuje podejście iteracyjne, umożliwiające regularne dostarczanie wartości dla interesariuszy.
+Celem tego projektu jest stworzenie aplikacji do przeglądania. sortowania i filtrowania danych z plików CSV, z interfejsem graficznym zaprojektowanym w Pythonie z wykorzystaniem biblioteki Tkinter. Projekt jest zgodny z wytycznymi SAFe® 6.0 i przyjmuje podejście iteracyjne, umożliwiające regularne dostarczanie wartości dla interesariuszy.
 
 2. Wizja Produktu
 
