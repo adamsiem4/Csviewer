@@ -80,7 +80,7 @@ def filter_data(data, tree):
 
 def main():
     #Przykładowy dataset
-    file_path = './src/social_media_entertainment_data.csv'
+    file_path = './src/assets/social_media_entertainment_data.csv'
     data = load_csv(file_path)
     if data is None:
         return
@@ -91,7 +91,7 @@ def main():
     root = ctk.CTk()
     root.title("CSViewer")
     root.geometry("900x600")
-    root.iconbitmap("./src/icon.ico")
+    root.iconbitmap("./src/assets/icon.ico")
 
     frame = ctk.CTkFrame(root)
     frame.pack(pady=10, padx=10, fill="both", expand=True)
