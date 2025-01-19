@@ -1,10 +1,8 @@
 import pandas as pd
-import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox
+import customtkinter as ctk
+from tkinter import ttk, messagebox
 
 def load_csv(file_path):
-    
     try:
         data = pd.read_csv(file_path).head(100)  # Limit to the first 100 rows
         return data
@@ -28,6 +26,24 @@ def display_data(data, tree):
     for index, row in data.iterrows():
         tree.insert("", "end", values=list(row))
 
+def apply_darkmode_to_treeview(tree):
+    """Apply dark mode styling to the Treeview widget."""
+    style = ttk.Style()
+    style.theme_use("clam")
+
+    style.configure("Treeview",
+                    background="#2E2E2E",
+                    foreground="white",
+                    fieldbackground="#2E2E2E",
+                    rowheight=25)
+    style.configure("Treeview.Heading",
+                    background="#333333",
+                    foreground="white",
+                    font=("Arial", 10, "bold"))
+    style.map("Treeview",
+              background=[("selected", "#4CAF50")],
+              foreground=[("selected", "white")])
+
 def sort_data(data, tree, sort_column, ascending):
     """Sort the DataFrame and update the Treeview."""
     try:
@@ -38,19 +54,18 @@ def sort_data(data, tree, sort_column, ascending):
 
 def filter_data(data, tree):
     """Filter the DataFrame based on user input and update the Treeview."""
-    filter_window = tk.Toplevel()
+    filter_window = ctk.CTkToplevel()
     filter_window.title("Filter Data")
-    filter_window.configure(bg="#2E2E2E")
 
-    tk.Label(filter_window, text="Select column to filter by:", fg="white", bg="#2E2E2E").pack(pady=5)
-    filter_column = tk.StringVar()
+    ctk.CTkLabel(filter_window, text="Select column to filter by:").pack(pady=5)
+    filter_column = ctk.StringVar()
     filter_column.set(data.columns[0])
 
-    column_menu = ttk.OptionMenu(filter_window, filter_column, *data.columns)
+    column_menu = ctk.CTkOptionMenu(filter_window, variable=filter_column, values=list(data.columns))
     column_menu.pack(pady=5)
 
-    tk.Label(filter_window, text="Enter value to filter:", fg="white", bg="#2E2E2E").pack(pady=5)
-    filter_value = tk.Entry(filter_window)
+    ctk.CTkLabel(filter_window, text="Enter value to filter:").pack(pady=5)
+    filter_value = ctk.CTkEntry(filter_window)
     filter_value.pack(pady=5)
 
     def apply_filter():
@@ -59,11 +74,15 @@ def filter_data(data, tree):
         try:
             filtered_data = data[data[column].astype(str).str.contains(value, case=False, na=False)]
             display_data(filtered_data, tree)
-            filter_window.destroy()
         except Exception as e:
             messagebox.showerror("Error", f"Error filtering data: {e}")
 
-    tk.Button(filter_window, text="Apply Filter", command=apply_filter, bg="#4CAF50", fg="white", activebackground="#45A049").pack(pady=10)
+    ctk.CTkButton(filter_window, text="Apply Filter", command=apply_filter).pack(pady=10)
+
+    # Prevent window from closing prematurely
+    filter_window.transient()
+    filter_window.grab_set()
+    filter_window.wait_window()
 
 def main():
     # Load fixed CSV file
@@ -73,72 +92,67 @@ def main():
         return
 
     # Create main application window
-    root = tk.Tk()
+    ctk.set_appearance_mode("dark")  # Set dark mode
+    ctk.set_default_color_theme("dark-blue")  # Optional: Use a dark color theme
+
+    root = ctk.CTk()
     root.title("CSV Viewer and Sorter")
-    root.state('zoomed')  # Open in fullscreen mode
+    root.geometry("900x600")  # Set default window size
+    root.iconbitmap("./src/icon.ico")  # Set custom icon
 
-    # Apply dark theme
-    root.configure(bg="#2E2E2E")
-
-    style = ttk.Style()
-    style.theme_use("clam")
-    style.configure("Treeview",
-                    background="#333333",
-                    foreground="white",
-                    rowheight=25,
-                    fieldbackground="#333333")
-    style.map("Treeview",
-              background=[("selected", "#4CAF50")],
-              foreground=[("selected", "white")])
-
-    frame = tk.Frame(root, bg="#2E2E2E")
-    frame.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
+    frame = ctk.CTkFrame(root)
+    frame.pack(pady=10, padx=10, fill="both", expand=True)
 
     # Create a Treeview widget with scrollbars
-    tree = ttk.Treeview(frame, selectmode="browse")
+    tree = ttk.Treeview(frame)
 
     x_scrollbar = ttk.Scrollbar(frame, orient="horizontal", command=tree.xview)
-    x_scrollbar.pack(side=tk.BOTTOM, fill=tk.X)
+    x_scrollbar.pack(side="bottom", fill="x")
 
     y_scrollbar = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
-    y_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+    y_scrollbar.pack(side="right", fill="y")
 
     tree.configure(xscroll=x_scrollbar.set, yscroll=y_scrollbar.set)
-    tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+    tree.pack(side="left", fill="both", expand=True)
+
+    apply_darkmode_to_treeview(tree)
 
     display_data(data, tree)
 
     def sort_file():
-        sort_window = tk.Toplevel(root)
+        sort_window = ctk.CTkToplevel(root)
         sort_window.title("Sort Options")
-        sort_window.configure(bg="#2E2E2E")
 
-        tk.Label(sort_window, text="Select column to sort by:", fg="white", bg="#2E2E2E").pack(pady=5)
-        sort_column = tk.StringVar()
+        ctk.CTkLabel(sort_window, text="Select column to sort by:").pack(pady=5)
+        sort_column = ctk.StringVar()
         sort_column.set(data.columns[0])
 
-        column_menu = ttk.OptionMenu(sort_window, sort_column, *data.columns)
+        column_menu = ctk.CTkOptionMenu(sort_window, variable=sort_column, values=list(data.columns))
         column_menu.pack(pady=5)
 
-        ascending = tk.BooleanVar(value=True)
-        tk.Checkbutton(sort_window, text="Sort in ascending order", variable=ascending, bg="#2E2E2E", fg="white", selectcolor="#4CAF50").pack(pady=5)
+        ascending = ctk.BooleanVar(value=True)
+        ctk.CTkCheckBox(sort_window, text="Sort in ascending order", variable=ascending).pack(pady=5)
 
         def apply_sort():
             sort_data(data, tree, sort_column.get(), ascending.get())
-            sort_window.destroy()
 
-        tk.Button(sort_window, text="Sort", command=apply_sort, bg="#4CAF50", fg="white", activebackground="#45A049").pack(pady=10)
+        ctk.CTkButton(sort_window, text="Sort", command=apply_sort).pack(pady=10)
 
-    button_frame = tk.Frame(root, bg="#2E2E2E")
+        # Prevent window from closing prematurely
+        sort_window.transient()
+        sort_window.grab_set()
+        sort_window.wait_window()
+
+    button_frame = ctk.CTkFrame(root)
     button_frame.pack(pady=10)
 
-    sort_button = tk.Button(button_frame, text="Sort Data", command=sort_file, bg="#4CAF50", fg="white", activebackground="#45A049")
+    sort_button = ctk.CTkButton(button_frame, text="Sort Data", command=sort_file)
     sort_button.grid(row=0, column=0, padx=5)
 
-    filter_button = tk.Button(button_frame, text="Filter Data", command=lambda: filter_data(data, tree), bg="#2196F3", fg="white", activebackground="#1976D2")
+    filter_button = ctk.CTkButton(button_frame, text="Filter Data", command=lambda: filter_data(data, tree))
     filter_button.grid(row=0, column=1, padx=5)
 
-    exit_button = tk.Button(button_frame, text="Exit", command=root.quit, bg="#D32F2F", fg="white", activebackground="#B71C1C")
+    exit_button = ctk.CTkButton(button_frame, text="Exit", command=root.quit, fg_color="red")
     exit_button.grid(row=0, column=2, padx=5)
 
     root.mainloop()
