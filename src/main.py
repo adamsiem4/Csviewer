@@ -36,6 +36,35 @@ def sort_data(data, tree, sort_column, ascending):
     except Exception as e:
         messagebox.showerror("Error", f"Error sorting data: {e}")
 
+def filter_data(data, tree):
+    """Filter the DataFrame based on user input and update the Treeview."""
+    filter_window = tk.Toplevel()
+    filter_window.title("Filter Data")
+    filter_window.configure(bg="#2E2E2E")
+
+    tk.Label(filter_window, text="Select column to filter by:", fg="white", bg="#2E2E2E").pack(pady=5)
+    filter_column = tk.StringVar()
+    filter_column.set(data.columns[0])
+
+    column_menu = ttk.OptionMenu(filter_window, filter_column, *data.columns)
+    column_menu.pack(pady=5)
+
+    tk.Label(filter_window, text="Enter value to filter:", fg="white", bg="#2E2E2E").pack(pady=5)
+    filter_value = tk.Entry(filter_window)
+    filter_value.pack(pady=5)
+
+    def apply_filter():
+        value = filter_value.get()
+        column = filter_column.get()
+        try:
+            filtered_data = data[data[column].astype(str).str.contains(value, case=False, na=False)]
+            display_data(filtered_data, tree)
+            filter_window.destroy()
+        except Exception as e:
+            messagebox.showerror("Error", f"Error filtering data: {e}")
+
+    tk.Button(filter_window, text="Apply Filter", command=apply_filter, bg="#4CAF50", fg="white", activebackground="#45A049").pack(pady=10)
+
 def main():
     # Load fixed CSV file
     file_path = './src/social_media_entertainment_data.csv'
@@ -106,8 +135,11 @@ def main():
     sort_button = tk.Button(button_frame, text="Sort Data", command=sort_file, bg="#4CAF50", fg="white", activebackground="#45A049")
     sort_button.grid(row=0, column=0, padx=5)
 
+    filter_button = tk.Button(button_frame, text="Filter Data", command=lambda: filter_data(data, tree), bg="#2196F3", fg="white", activebackground="#1976D2")
+    filter_button.grid(row=0, column=1, padx=5)
+
     exit_button = tk.Button(button_frame, text="Exit", command=root.quit, bg="#D32F2F", fg="white", activebackground="#B71C1C")
-    exit_button.grid(row=0, column=1, padx=5)
+    exit_button.grid(row=0, column=2, padx=5)
 
     root.mainloop()
 
