@@ -4,18 +4,16 @@ from tkinter import ttk, messagebox
 
 def load_csv(file_path):
     try:
-        data = pd.read_csv(file_path).head(100)  # Limit to the first 100 rows
+        data = pd.read_csv(file_path).head(100)
         return data
     except Exception as e:
         messagebox.showerror("Error", f"Error loading file: {e}")
         return None
 
 def display_data(data, tree):
-    """Display the DataFrame in the Treeview widget."""
-    # Clear existing data in the Treeview
     tree.delete(*tree.get_children())
 
-    # Add new data to the Treeview
+
     tree["columns"] = list(data.columns)
     tree["show"] = "headings"
 
@@ -27,7 +25,6 @@ def display_data(data, tree):
         tree.insert("", "end", values=list(row))
 
 def apply_darkmode_to_treeview(tree):
-    """Apply dark mode styling to the Treeview widget."""
     style = ttk.Style()
     style.theme_use("clam")
 
@@ -45,7 +42,6 @@ def apply_darkmode_to_treeview(tree):
               foreground=[("selected", "white")])
 
 def sort_data(data, tree, sort_column, ascending):
-    """Sort the DataFrame and update the Treeview."""
     try:
         sorted_data = data.sort_values(by=sort_column, ascending=ascending)
         display_data(sorted_data, tree)
@@ -53,7 +49,6 @@ def sort_data(data, tree, sort_column, ascending):
         messagebox.showerror("Error", f"Error sorting data: {e}")
 
 def filter_data(data, tree):
-    """Filter the DataFrame based on user input and update the Treeview."""
     filter_window = ctk.CTkToplevel()
     filter_window.title("Filter Data")
 
@@ -79,31 +74,28 @@ def filter_data(data, tree):
 
     ctk.CTkButton(filter_window, text="Apply Filter", command=apply_filter).pack(pady=10)
 
-    # Prevent window from closing prematurely
     filter_window.transient()
     filter_window.grab_set()
     filter_window.wait_window()
 
 def main():
-    # Load fixed CSV file
+    #Przykładowy dataset
     file_path = './src/social_media_entertainment_data.csv'
     data = load_csv(file_path)
     if data is None:
         return
 
-    # Create main application window
-    ctk.set_appearance_mode("dark")  # Set dark mode
-    ctk.set_default_color_theme("dark-blue")  # Optional: Use a dark color theme
+    ctk.set_appearance_mode("dark")
+    ctk.set_default_color_theme("dark-blue")
 
     root = ctk.CTk()
-    root.title("CSV Viewer and Sorter")
-    root.geometry("900x600")  # Set default window size
-    root.iconbitmap("./src/icon.ico")  # Set custom icon
+    root.title("CSViewer")
+    root.geometry("900x600")
+    root.iconbitmap("./src/icon.ico")
 
     frame = ctk.CTkFrame(root)
     frame.pack(pady=10, padx=10, fill="both", expand=True)
 
-    # Create a Treeview widget with scrollbars
     tree = ttk.Treeview(frame)
 
     x_scrollbar = ttk.Scrollbar(frame, orient="horizontal", command=tree.xview)
@@ -138,7 +130,6 @@ def main():
 
         ctk.CTkButton(sort_window, text="Sort", command=apply_sort).pack(pady=10)
 
-        # Prevent window from closing prematurely
         sort_window.transient()
         sort_window.grab_set()
         sort_window.wait_window()
