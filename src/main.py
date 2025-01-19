@@ -4,7 +4,7 @@ from tkinter import ttk
 from tkinter import messagebox
 
 def load_csv(file_path):
-    """Load the CSV file into a DataFrame."""
+    
     try:
         data = pd.read_csv(file_path).head(100)  # Limit to the first 100 rows
         return data
