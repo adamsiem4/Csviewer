@@ -1,8 +1,7 @@
-# Dokumentacja Projektu: "Przeglądarka CSV i Sortowanie" (oparta o SAFe® 6.0)
+# Dokumentacja Projektu: "Przeglądarka CSV"
 
 ## 1. Wprowadzenie
-Celem tego projektu jest stworzenie aplikacji do przeglądania i sortowania danych z plików CSV, z interfejsem graficznym zaprojektowanym w Pythonie z wykorzystaniem biblioteki Tkinter. Projekt jest zgodny z wytycznymi SAFe® 6.0 i przyjmuje podejście iteracyjne, umożliwiające regularne dostarczanie wartości dla interesariuszy.
-
+Celem tego projektu jest stworzenie aplikacji do przeglądania, sortowania i filtrowanie danych z plików CSV, z interfejsem graficznym zaprojektowanym w Pythonie z wykorzystaniem biblioteki Tkinter.
 ---
 
 ## 2. Wizja Produktu
@@ -11,6 +10,7 @@ Aplikacja umożliwia użytkownikom:
 
 - Wyświetlanie danych z plików CSV w przyjaznym interfejsie graficznym.
 - Sortowanie danych według wybranych kolumn.
+- Filtrowanie danych według wybranych kolumn.
 - Pracę w trybie ciemnego motywu (dark mode), poprawiając komfort pracy.
 - Przeglądanie ograniczonych wyników (pierwsze 100 rekordów) w celu optymalizacji wydajności.
 
@@ -18,7 +18,7 @@ Aplikacja umożliwia użytkownikom:
 
 ## 3. Cel Biznesowy
 
-Projekt ma na celu wsparcie operacji analizy danych przez dostarczenie łatwego w obsłudze narzędzia umożliwiającego szybkie i efektywne przeglądanie oraz sortowanie danych CSV.
+Projekt ma na celu wsparcie operacji analizy danych przez dostarczenie łatwego w obsłudze narzędzia umożliwiającego szybkie i efektywne przeglądanie danych CSV.
 
 ---
 
@@ -34,9 +34,10 @@ Projekt ma na celu wsparcie operacji analizy danych przez dostarczenie łatwego 
 - Interfejs oparty na kontrolce `Treeview` z paskami przewijania (pionowym i poziomym).
 - Limit wyników do 100 rekordów, aby zapewnić płynne działanie aplikacji.
 
-### 4.3 Sortowanie
+### 4.3 Manipulacja danymi
 
 - Użytkownik może sortować dane według wybranej kolumny w porządku rosnącym lub malejącym.
+- Użytkownik może filtrować dane według wybranej kolumny w porządku rosnącym lub malejącym.
 
 ### 4.4 Interfejs Użytkownika
 
